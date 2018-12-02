@@ -1,4 +1,5 @@
 from collections import Counter
+from difflib import SequenceMatcher
 
 # --- Part One ---
 
@@ -25,9 +26,37 @@ for word in input:
             three_count += 1
             found_three = True
 
-print('two_count: ', two_count)
-print('three_count: ', three_count)
-
 checksum = two_count * three_count
 
-print(two_count, ' x ', three_count, ' = ', checksum)
+print('----------------')
+print('Part 1: ', checksum)
+print('----------------')
+
+
+# --- Part Two ---
+
+# The boxes will have IDs which differ by exactly one character at the same
+# position in both strings.
+# What letters are common between the two correct box IDs?
+
+found_match = False
+
+similarity_threshold = (len(input[0]) - 1) / len(input[0])
+
+for word in input:
+    for compare_word in input:
+        similarity = SequenceMatcher(None, word, compare_word).ratio()
+        if similarity == similarity_threshold:
+            found_match = True
+            break
+
+    if found_match:
+        break
+
+box_id = [i for i, j in zip(word, compare_word) if i == j]
+
+box_id = ''.join(box_id)
+
+print('----------------')
+print('Part 2: ', box_id)
+print('----------------')
